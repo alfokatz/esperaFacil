@@ -1,0 +1,29 @@
+{
+  "title": "Proyecto Base",
+  "home_title": "Inicio",
+  "detail_title": "Detalle",
+  "album": "Album: {}",
+  "like_button": "Me gusta {}",
+  "dislike_button": "No me gusta {}",
+  "tap_counter": "Contador de clicks",
+  "generic_error_title": "Ocurrió un error",
+  "generic_error_description": "Reintente mas tarde",
+  "errors": {
+    "connection_timeout_title": "Tiempo de conexión agotado",
+    "connection_timeout_message": "La conexión se agotó, revisa tu red o inténtalo de nuevo.",
+    "receive_timeout_title": "Tiempo de espera agotado",
+    "receive_timeout_message": "El servidor tardó demasiado en responder.",
+    "send_timeout_title": "Tiempo de envío agotado",
+    "send_timeout_message": "La solicitud no se envió a tiempo, inténtalo de nuevo.",
+    "cancelled_title": "Solicitud cancelada",
+    "cancelled_message": "La solicitud ha sido cancelada.",
+    "bad_response_title": "Respuesta inválida",
+    "bad_response_message": "El servidor respondió con un error inesperado.",
+    "ssl_error_title": "Error de certificado SSL",
+    "ssl_error_message": "La conexión no es segura debido a un problema con el certificado.",
+    "connection_error_title": "Error de conexión",
+    "connection_error_message": "No se pudo establecer la conexión, revisa tu red.",
+    "unknown_title": "Error desconocido",
+    "unknown_message": "Ocurrió un error inesperado, por favor inténtalo de nuevo."
+  }
+}

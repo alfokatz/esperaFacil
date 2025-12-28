@@ -1,0 +1,11 @@
+{
+  "title": "Base project",
+  "home_title": "Home",
+  "detail_title": "Detail",
+  "album": "Album: {}",
+  "like_button": "Like {}",
+  "dislike_button": "Dislike {}",
+  "tap_counter": "Counter clicks",
+  "generic_error_title": "An error occurred",
+  "generic_error_description": "An error occurred, please try again later"
+}
