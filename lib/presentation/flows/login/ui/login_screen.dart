@@ -1,12 +1,9 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/presentation/base/content_state/content_state_provider.dart';
 import 'package:template/presentation/base/content_state/content_state_widget.dart';
-import 'package:template/presentation/base/core/base_hook_widget.dart';
 import 'package:template/presentation/base/core/base_stateful_widget.dart';
 import 'package:template/presentation/base/theme/app_dimens.dart';
-import 'package:template/presentation/flows/login/providers/login_provider.dart';
 
 import '../../../base/theme/app_images.dart';
 import 'widgets/login_form.dart';

@@ -1,5 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/config/navigation/navigator.dart';
 import 'package:template/presentation/base/providers/base_state_notifier.dart';
+import 'package:template/presentation/flows/login/nav/login_nav.dart';
 import 'package:template/presentation/flows/login/states/login_action.dart';
 import 'package:template/presentation/flows/login/states/login_state.dart';
 
@@ -10,7 +12,7 @@ class LoginProvider extends BaseStateNotifier<LoginState, LoginAction> {
     showContent();
   }
 
-  void updateEmail(String email) {
+  void updateEmail({required String email}) {
     reducer(action: UpdateEmailAction(email: email));
   }
 
@@ -23,8 +25,45 @@ class LoginProvider extends BaseStateNotifier<LoginState, LoginAction> {
   }
 
   void onLogin() {
+    // Validar campos
+    if (state.email.isEmpty) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'El correo electrónico es requerido',
+      );
+      return;
+    }
+
+    if (!state.email.contains('@') || !state.email.contains('.')) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'El correo electrónico no es válido',
+      );
+      return;
+    }
+
+    if (state.password.isEmpty) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'La contraseña es requerida',
+      );
+      return;
+    }
+
+    if (state.password.length < 6) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'La contraseña debe tener al menos 6 caracteres',
+      );
+      return;
+    }
+
+    // Si todo es válido, proceder con el login
     reducer(action: LoginActionButton());
-    // TODO: Implementar lógica de login
+    // TODO: Implementar lógica de login (guardar token, etc.)
+
+    // Navegar a la pantalla de home
+    ref.read(navigationProvider.notifier).navigate(GotoHome());
   }
 
   void onForgotPassword() {

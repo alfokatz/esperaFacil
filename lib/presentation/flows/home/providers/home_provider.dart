@@ -1,60 +1,63 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/config/navigation/navigator.dart';
-import 'package:template/domain/entities/photo.dart';
-import 'package:template/domain/use_cases/get_photos_use_case.dart';
 import 'package:template/presentation/base/providers/base_state_notifier.dart';
-import 'package:template/presentation/flows/detail/nav/detail_nav.dart';
 import 'package:template/presentation/flows/home/states/home_action.dart';
 import 'package:template/presentation/flows/home/states/home_state.dart';
+import 'package:template/presentation/flows/home/ui/widgets/waiters_filter.dart';
 
 class HomeProvider extends BaseStateNotifier<HomeState, HomeAction> {
-  final GetPhotosUseCase getPhotosUseCase;
-
-  HomeProvider({
-    required super.ref,
-    required this.getPhotosUseCase,
-  }) : super(state: HomeState()) {
+  HomeProvider({required super.ref}) : super(state: HomeState()) {
     init();
   }
 
   void init() async {
-    showLoading();
-    super.callService<List<Photo>>(
-      service: () => getPhotosUseCase(),
-      onSuccess: (photos) {
-        reducer(
-          action: LoadAction(photos: photos),
-        );
-        showContent();
-      },
-      onCustomError: (error) {
-
-        },
-    );
+    showContent();
+    // TODO: Load waiters from repository
   }
 
-  void onTapPhoto({required Photo photo}) {
-    ref.read(navigationProvider.notifier).navigate(
-          GotoDetail(
-            photoId: photo.id.toString(),
-          ),
-        );
+  void setFilter(WaitersFilterType filter) {
+    state = state.copyWith(selectedFilter: filter);
+  }
+
+  void cancelWaiter(String id) {
+    // TODO: Implement cancel waiter logic
+  }
+
+  void notifyWaiter(String id) {
+    // TODO: Implement notify waiter logic
+  }
+
+  void serveWaiter(String id) {
+    // TODO: Implement serve waiter logic
+  }
+
+  void onSettingsPressed() {
+    // TODO: Navigate to settings
+  }
+
+  void onAddWaiter() {
+    // TODO: Navigate to add waiter screen
+  }
+
+  List<Map<String, dynamic>> getFilteredWaiters() {
+    switch (state.selectedFilter) {
+      case WaitersFilterType.all:
+        return state.waiters;
+      case WaitersFilterType.waiting:
+        return state.waiters.where((w) => w['status'] == 'waiting').toList();
+      case WaitersFilterType.notified:
+        return state.waiters.where((w) => w['status'] == 'notified').toList();
+    }
   }
 
   @override
   void reducer({required HomeAction action}) {
     switch (action) {
       case LoadAction():
-        state = state.copyWith(
-          photos: action.photos,
-        );
+        state = state.copyWith(photos: action.photos);
     }
   }
 }
 
 final homeProvider = StateNotifierProvider.autoDispose<HomeProvider, HomeState>(
-  (ref) => HomeProvider(
-    ref: ref,
-    getPhotosUseCase: ref.watch(getPhotosUseCase),
-  ),
+  (ref) => HomeProvider(ref: ref),
 );

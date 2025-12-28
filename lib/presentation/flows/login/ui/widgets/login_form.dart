@@ -28,7 +28,7 @@ class LoginForm extends BaseHookWidget {
         ),
         const SizedBox(height: AppDimens.smallMargin),
         TextField(
-          onChanged: loginNotifier.updateEmail,
+          onChanged: (value) => loginNotifier.updateEmail(email: value),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: 'usuario@empresa.com',

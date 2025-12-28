@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/presentation/base/alert/alert_provider.dart';
 import 'package:template/presentation/base/content_state/content_state_provider.dart';
 import 'package:template/shared/extensions/DynamicExtensions.dart';
 import 'package:template/config/networking/error/http_error.dart'
@@ -35,6 +36,18 @@ abstract class BaseStateNotifier<S, A> extends StateNotifier<S> {
 
   void showContent() {
     ref.read(contentStateNotifierProvider.notifier).setShowContent();
+  }
+
+  void showErrorAlert({String? title, String? message}) {
+    ref.read(alertProvider.notifier).showError(title: title, message: message);
+  }
+
+  void showSuccessAlert({String? title, String? message}) {
+    ref.read(alertProvider.notifier).showSuccess(title: title, message: message);
+  }
+
+  void showWarningAlert({String? title, String? message}) {
+    ref.read(alertProvider.notifier).showWarning(title: title, message: message);
   }
 
   void reducer({required A action});
