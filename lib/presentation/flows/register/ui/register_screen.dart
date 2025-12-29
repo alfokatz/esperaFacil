@@ -4,22 +4,17 @@ import 'package:template/presentation/base/content_state/content_state_provider.
 import 'package:template/presentation/base/content_state/content_state_widget.dart';
 import 'package:template/presentation/base/core/base_stateful_widget.dart';
 import 'package:template/presentation/base/theme/app_dimens.dart';
-import 'package:template/presentation/shared/app_buttons.dart';
 
 import '../../../base/theme/app_images.dart';
-import 'widgets/login_form.dart';
-import 'widgets/register_now.dart';
-import 'widgets/title_section.dart';
-import 'widgets/version_text.dart';
 
-class LoginScreen extends StatefulHookConsumerWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulHookConsumerWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends BaseStatefulWidget<LoginScreen> {
+class _RegisterScreenState extends BaseStatefulWidget<RegisterScreen> {
   @override
   void initState() {
     super.initState();
@@ -41,22 +36,7 @@ class _LoginScreenState extends BaseStatefulWidget<LoginScreen> {
             padding: const EdgeInsets.symmetric(
               horizontal: AppDimens.mediumMargin,
             ),
-            child: SizedBox(
-              width: size.width,
-              child: Column(
-                children: [
-                  const SizedBox(height: AppDimens.largeMargin),
-                  AppImages.appLogo(width: 100, height: 100),
-                  const SizedBox(height: AppDimens.mediumMargin),
-                  TitleSection(),
-                  const SizedBox(height: AppDimens.mediumMargin),
-                  LoginForm(),
-                  const SizedBox(height: AppDimens.mediumMargin),
-                  const RegisterNow(),
-                  const VersionText(),
-                ],
-              ),
-            ),
+            child: Placeholder(),
           ),
         ),
       ),

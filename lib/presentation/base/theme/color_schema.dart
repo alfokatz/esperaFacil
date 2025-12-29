@@ -6,7 +6,7 @@ final colorSchemeProvider = Provider<ColorScheme>((ref) {
     brightness: Brightness.light,
 
     // Primary
-    primary: Color(0xFF97D700),
+    primary: Color(0xFF2196F3),
     onPrimary: Color(0xFFFFFFFF),
     primaryContainer: Color(0xFFEAF7CC),
     onPrimaryContainer: Color(0xFF0F1600),
@@ -27,7 +27,7 @@ final colorSchemeProvider = Provider<ColorScheme>((ref) {
     surface: Color(0xFFFFFFFF),
     onSurface: Color(0xFF0F1600),
     onSurfaceVariant: Color(0xFFACADAF),
-    outline: Color(0xFF97D700),
+    outline: Color(0xFF2196F3),
     outlineVariant: Color(0xFF7A7B7D),
 
     // Fill in the rest with sensible defaults or your own choices:
@@ -38,6 +38,6 @@ final colorSchemeProvider = Provider<ColorScheme>((ref) {
     shadow: Color(0xFF000000),
     inverseSurface: Color(0xFF303030),
     onInverseSurface: Color(0xFFFFFFFF),
-    inversePrimary: Color(0xFF80C400),
+    inversePrimary: Color(0xFF2196F3),
   );
 });

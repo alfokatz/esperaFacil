@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../base/core/base_hook_widget.dart';
 import '../../../../base/theme/app_dimens.dart';
+import '../../../../shared/app_buttons.dart';
 import '../../providers/login_provider.dart';
 
 class LoginForm extends BaseHookWidget {
@@ -128,25 +129,12 @@ class LoginForm extends BaseHookWidget {
 
         // Login Button
         const SizedBox(height: AppDimens.largeMargin),
-        ElevatedButton(
+        CustomPrimaryButton(
+          height: 50,
           onPressed: loginNotifier.onLogin,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2196F3),
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 0,
-          ),
-          child: Text(
-            'Ingresar',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
+          text: 'Ingresar',
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
         ),
       ],
     );
