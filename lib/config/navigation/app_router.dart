@@ -5,6 +5,7 @@ import 'package:template/presentation/flows/detail/nav/detail_router.dart';
 import 'package:template/presentation/flows/error_page/nav/error_router.dart';
 import 'package:template/presentation/flows/home/nav/home_router.dart';
 import 'package:template/presentation/flows/login/nav/login_router.dart';
+import 'package:template/presentation/flows/register/nav/register_router.dart';
 
 class AppRouter {
   final Ref ref;
@@ -21,6 +22,7 @@ class AppRouter {
             (context, state) => state.namedLocation(LoginRouter.loginRouteName),
       ),
       LoginRouter.getRoute(),
+      RegisterRouter.getRoute(),
       HomeRouter.getRoute(),
       DetailRouter.getRoute(),
     ],

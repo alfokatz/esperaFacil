@@ -7,3 +7,15 @@ class LoadAction extends HomeAction {
 
   LoadAction({this.photos = const []});
 }
+
+class LoadHomeDataAction extends HomeAction {
+  final String businessName;
+  final int waitingGroupsCount;
+  final List<Map<String, dynamic>> waiters;
+
+  LoadHomeDataAction({
+    required this.businessName,
+    required this.waitingGroupsCount,
+    required this.waiters,
+  });
+}

@@ -34,6 +34,7 @@ class HeaderInterceptor extends InterceptorsWrapper {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // PreferencesManager ya maneja Supabase internamente
     final token = await _preferences.getToken();
 
     final headers = <String, dynamic>{

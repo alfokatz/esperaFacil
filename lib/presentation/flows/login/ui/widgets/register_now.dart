@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../base/core/base_hook_widget.dart';
 import '../../../../base/theme/app_dimens.dart';
+import 'package:template/config/navigation/navigator.dart';
 import '../../../../shared/app_buttons.dart';
+import '../../../register/nav/register_nav.dart';
 
-class RegisterNow extends StatelessWidget {
-  const RegisterNow({super.key});
+class RegisterNow extends BaseHookWidget {
+  RegisterNow({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildView(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       spacing: AppDimens.smallMargin,
@@ -23,7 +27,9 @@ class RegisterNow extends StatelessWidget {
           width: double.infinity,
           child: CustomOutlinedButton(
             height: 45,
-            onPressed: () {},
+            onPressed: () {
+              ref.read(navigationProvider.notifier).navigate(GotoRegister());
+            },
             label: 'Registrarse',
             backgroundColor: Colors.white,
             borderColor: Theme.of(context).colorScheme.primary,

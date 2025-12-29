@@ -1,5 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/config/navigation/navigator.dart';
+import 'package:template/infraestructure/managers/preferences_manager_impl.dart';
+import 'package:template/infraestructure/repositories/auth_repository_impl.dart';
 import 'package:template/presentation/base/providers/base_state_notifier.dart';
 import 'package:template/presentation/flows/login/nav/login_nav.dart';
 import 'package:template/presentation/flows/login/states/login_action.dart';
@@ -24,7 +26,7 @@ class LoginProvider extends BaseStateNotifier<LoginState, LoginAction> {
     reducer(action: TogglePasswordVisibilityAction());
   }
 
-  void onLogin() {
+  Future<void> onLogin() async {
     // Validar campos
     if (state.email.isEmpty) {
       showErrorAlert(
@@ -59,16 +61,92 @@ class LoginProvider extends BaseStateNotifier<LoginState, LoginAction> {
     }
 
     // Si todo es válido, proceder con el login
-    reducer(action: LoginActionButton());
-    // TODO: Implementar lógica de login (guardar token, etc.)
+    // Guardar valores locales para evitar acceder a state después del dispose
+    final email = state.email;
+    final password = state.password;
 
-    // Navegar a la pantalla de home
-    ref.read(navigationProvider.notifier).navigate(GotoHome());
+    reducer(action: LoginActionButton());
+    showLoading();
+
+    final authRepository = ref.read(authRepositoryProvider);
+    final preferencesManager = ref.read(preferenceManagerProvider);
+    final navigation = ref.read(navigationProvider.notifier);
+
+    final result = await authRepository.signIn(
+      email: email,
+      password: password,
+    );
+
+    result.fold(
+      (error) {
+        showContent();
+        showErrorAlert(
+          title: 'Error de autenticación',
+          message:
+              (error.message?.isNotEmpty ?? false)
+                  ? error.message!
+                  : 'No se pudo iniciar sesión. Por favor, intenta nuevamente.',
+        );
+      },
+      (token) async {
+        // Guardar el token (PreferencesManager lo sincronizará con Supabase)
+        await preferencesManager.saveToken(token: token);
+        showContent();
+
+        // Navegar a la pantalla de home
+        navigation.navigate(GotoHome());
+      },
+    );
   }
 
-  void onForgotPassword() {
+  Future<void> onForgotPassword() async {
     reducer(action: LoginActionForgotPassword());
-    // TODO: Implementar lógica de recuperar contraseña
+
+    // Guardar valor local para evitar acceder a state después del dispose
+    final email = state.email;
+
+    // Validar que haya un email
+    if (email.isEmpty) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'Por favor ingresa tu correo electrónico',
+      );
+      return;
+    }
+
+    if (!email.contains('@') || !email.contains('.')) {
+      showErrorAlert(
+        title: 'Error de validación',
+        message: 'El correo electrónico no es válido',
+      );
+      return;
+    }
+
+    showLoading();
+
+    final authRepository = ref.read(authRepositoryProvider);
+
+    final result = await authRepository.resetPassword(email: email);
+
+    result.fold(
+      (error) {
+        showContent();
+        showErrorAlert(
+          title: 'Error',
+          message:
+              (error.message?.isNotEmpty ?? false)
+                  ? error.message!
+                  : 'No se pudo enviar el correo de recuperación. Por favor, intenta nuevamente.',
+        );
+      },
+      (_) {
+        showContent();
+        showSuccessAlert(
+          title: 'Correo enviado',
+          message: 'Se ha enviado un correo de recuperación a $email',
+        );
+      },
+    );
   }
 
   @override

@@ -10,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:template/config/navigation/app_router.dart';
 import 'package:template/config/tracking/mix_panel_utils.dart';
 import 'package:template/config/translate/remote_config_asset_loader.dart';
@@ -26,6 +27,13 @@ void main() async {
   await _setupEnviroment();
   final mixPanel = await _setupMixPanel();
   await EasyLocalization.ensureInitialized();
+
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL'] as String,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY'] as String,
+  );
+
+  final supabase = Supabase.instance.client;
 
   final sharedPreferences = await SharedPreferences.getInstance();
 

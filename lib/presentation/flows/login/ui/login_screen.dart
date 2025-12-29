@@ -4,7 +4,6 @@ import 'package:template/presentation/base/content_state/content_state_provider.
 import 'package:template/presentation/base/content_state/content_state_widget.dart';
 import 'package:template/presentation/base/core/base_stateful_widget.dart';
 import 'package:template/presentation/base/theme/app_dimens.dart';
-import 'package:template/presentation/shared/app_buttons.dart';
 
 import '../../../base/theme/app_images.dart';
 import 'widgets/login_form.dart';
@@ -52,7 +51,7 @@ class _LoginScreenState extends BaseStatefulWidget<LoginScreen> {
                   const SizedBox(height: AppDimens.mediumMargin),
                   LoginForm(),
                   const SizedBox(height: AppDimens.mediumMargin),
-                  const RegisterNow(),
+                  RegisterNow(),
                   const VersionText(),
                 ],
               ),

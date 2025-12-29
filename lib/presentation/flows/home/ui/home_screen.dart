@@ -15,11 +15,8 @@ class HomeScreen extends StatefulHookConsumerWidget {
 class _HomeScreenState extends BaseStatefulWidget<HomeScreen> {
   @override
   void initState() {
-    runAfterPostFrameCallback(() {
-      ref.read(homeProvider.notifier).init();
-    });
-
     super.initState();
+    // init() ya se llama automáticamente en el constructor de HomeProvider
   }
 
   @override
