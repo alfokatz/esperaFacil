@@ -19,3 +19,9 @@ class LoadHomeDataAction extends HomeAction {
     required this.waiters,
   });
 }
+
+class AddWaiterAction extends HomeAction {
+  final Map<String, dynamic> waiter;
+
+  AddWaiterAction({required this.waiter});
+}

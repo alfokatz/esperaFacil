@@ -31,11 +31,15 @@ abstract class BaseStateNotifier<S, A> extends StateNotifier<S> {
   }
 
   void showLoading() {
+    print('📊 [BaseStateNotifier] showLoading() llamado');
     ref.read(contentStateNotifierProvider.notifier).setLoading();
+    print('📊 [BaseStateNotifier] setLoading() ejecutado');
   }
 
   void showContent() {
+    print('📊 [BaseStateNotifier] showContent() llamado');
     ref.read(contentStateNotifierProvider.notifier).setShowContent();
+    print('📊 [BaseStateNotifier] setShowContent() ejecutado');
   }
 
   void showErrorAlert({String? title, String? message}) {
@@ -43,11 +47,15 @@ abstract class BaseStateNotifier<S, A> extends StateNotifier<S> {
   }
 
   void showSuccessAlert({String? title, String? message}) {
-    ref.read(alertProvider.notifier).showSuccess(title: title, message: message);
+    ref
+        .read(alertProvider.notifier)
+        .showSuccess(title: title, message: message);
   }
 
   void showWarningAlert({String? title, String? message}) {
-    ref.read(alertProvider.notifier).showWarning(title: title, message: message);
+    ref
+        .read(alertProvider.notifier)
+        .showWarning(title: title, message: message);
   }
 
   void reducer({required A action});

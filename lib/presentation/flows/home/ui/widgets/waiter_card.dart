@@ -8,6 +8,7 @@ class WaiterCard extends StatelessWidget {
   final String? photoUrl;
   final int peopleCount;
   final int waitingMinutes;
+  final int? estimatedWaitMinutes;
   final WaiterStatus status;
   final VoidCallback? onCancel;
   final VoidCallback? onNotify;
@@ -19,6 +20,7 @@ class WaiterCard extends StatelessWidget {
     this.photoUrl,
     required this.peopleCount,
     required this.waitingMinutes,
+    this.estimatedWaitMinutes,
     required this.status,
     this.onCancel,
     this.onNotify,
@@ -158,12 +160,27 @@ class WaiterCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Waiting time
-                Text(
-                  '$waitingMinutes min',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: const Color(0xFF666666),
-                  ),
+                // Waiting time and estimated time
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      '$waitingMinutes min',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: const Color(0xFF666666),
+                      ),
+                    ),
+                    if (estimatedWaitMinutes != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        'Est: $estimatedWaitMinutes min',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: const Color(0xFF999999),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
@@ -172,33 +189,28 @@ class WaiterCard extends StatelessWidget {
             Row(
               children: [
                 // Cancel button
-                Expanded(
-                  child: _ActionButton(
-                    icon: Icons.close,
-                    label: 'Cancelar',
-                    backgroundColor: const Color(0xFFE0E0E0),
-                    textColor: const Color(0xFF666666),
-                    onPressed: onCancel,
-                  ),
+                _ActionButton(
+                  icon: Icons.close,
+                  label: 'Cancelar',
+                  backgroundColor: const Color.fromARGB(160, 233, 99, 99),
+                  textColor: const Color(0xFF666666),
+                  onPressed: onCancel,
                 ),
                 const SizedBox(width: AppDimens.smallMargin),
                 // Notify button
-                Expanded(
-                  child: _ActionButton(
-                    icon: Icons.notifications_outlined,
-                    label: 'Avisar',
-                    backgroundColor: const Color(0xFFFFF9C4),
-                    textColor: const Color(0xFF666666),
-                    onPressed: onNotify,
-                  ),
+                _ActionButton(
+                  icon: Icons.notifications_outlined,
+                  label: 'Avisar',
+                  backgroundColor: const Color.fromARGB(147, 255, 168, 38),
+                  textColor: const Color(0xFF666666),
+                  onPressed: onNotify,
                 ),
                 const SizedBox(width: AppDimens.smallMargin),
                 // Serve button
                 Expanded(
-                  flex: 2,
                   child: _ActionButton(
                     icon: null,
-                    label: 'Atender',
+                    label: 'Marcar como atendido',
                     backgroundColor: const Color(0xFF2196F3),
                     textColor: Colors.white,
                     onPressed: onServe,
@@ -219,6 +231,7 @@ class _ActionButton extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final VoidCallback? onPressed;
+  final double? width;
 
   const _ActionButton({
     required this.icon,
@@ -226,40 +239,51 @@ class _ActionButton extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     this.onPressed,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: textColor,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimens.smallMargin,
-          vertical: 12,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 0,
-        minimumSize: const Size(0, 44),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[Icon(icon, size: 18), const SizedBox(width: 6)],
-          Flexible(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: textColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
+    return SizedBox(
+      width: width,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimens.smallMargin,
+            vertical: 12,
           ),
-        ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 0,
+          minimumSize: const Size(0, 44),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 18),
+              const SizedBox(width: 6),
+            ],
+            Flexible(
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

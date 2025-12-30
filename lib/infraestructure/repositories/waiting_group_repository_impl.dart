@@ -41,6 +41,7 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
                   notifiedAt: item['notified_at'] as String?,
                   servedAt: item['served_at'] as String?,
                   cancelledAt: item['cancelled_at'] as String?,
+                  estimatedWaitMinutes: item['estimated_wait_minutes'] as int?,
                 ),
               )
               .toList();
@@ -121,6 +122,7 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
     required String name,
     required int peopleCount,
     String? photoUrl,
+    int? estimatedWaitMinutes,
   }) async {
     try {
       final user = supabase.auth.currentUser;
@@ -130,16 +132,20 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
         );
       }
 
+      final insertData = {
+        'business_id': user.id,
+        'name': name,
+        'people_count': peopleCount,
+        'status': 'waiting',
+        if (photoUrl != null) 'photo_url': photoUrl,
+        if (estimatedWaitMinutes != null)
+          'estimated_wait_minutes': estimatedWaitMinutes,
+      };
+
       final response =
           await supabase
               .from('waiting_groups')
-              .insert({
-                'business_id': user.id,
-                'name': name,
-                'people_count': peopleCount,
-                'status': 'waiting',
-                'photo_url': photoUrl,
-              })
+              .insert(insertData)
               .select()
               .single();
 
@@ -154,6 +160,7 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
         notifiedAt: response['notified_at'] as String?,
         servedAt: response['served_at'] as String?,
         cancelledAt: response['cancelled_at'] as String?,
+        estimatedWaitMinutes: response['estimated_wait_minutes'] as int?,
       );
 
       return right(waitingGroup);

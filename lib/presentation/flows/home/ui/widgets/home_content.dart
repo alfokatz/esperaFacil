@@ -6,6 +6,8 @@ import 'package:template/presentation/flows/home/ui/widgets/home_app_bar.dart';
 import 'package:template/presentation/flows/home/ui/widgets/waiter_card.dart';
 import 'package:template/presentation/flows/home/ui/widgets/waiters_filter.dart';
 
+import '../../../../base/content_state/content_state_widget.dart';
+
 class HomeContent extends HookConsumerWidget {
   const HomeContent({super.key});
 
@@ -20,66 +22,70 @@ class HomeContent extends HookConsumerWidget {
     // Get filtered waiters from provider
     final filteredWaiters = homeNotifier.getFilteredWaiters();
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-      appBar: HomeAppBar(
-        businessName: homeState.businessName,
-        waitingGroupsCount: homeState.waitingGroupsCount,
-        onSettingsPressed: homeNotifier.onSettingsPressed,
-      ),
-      body: Column(
-        children: [
-          // Filter buttons
-          Padding(
-            padding: const EdgeInsets.only(
-              top: AppDimens.mediumMargin,
-              bottom: AppDimens.smallMargin,
+    return ContentStateWidget(
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF5F5F5),
+        appBar: HomeAppBar(
+          businessName: homeState.businessName,
+          waitingGroupsCount: homeState.waitingGroupsCount,
+          onSettingsPressed: homeNotifier.onSettingsPressed,
+        ),
+        body: Column(
+          children: [
+            // Filter buttons
+            Padding(
+              padding: const EdgeInsets.only(
+                top: AppDimens.mediumMargin,
+                bottom: AppDimens.smallMargin,
+              ),
+              child: WaitersFilter(
+                selectedFilter: selectedFilter,
+                onFilterChanged: (filter) {
+                  homeNotifier.setFilter(filter);
+                },
+              ),
             ),
-            child: WaitersFilter(
-              selectedFilter: selectedFilter,
-              onFilterChanged: (filter) {
-                homeNotifier.setFilter(filter);
-              },
+            // Waiters list
+            Expanded(
+              child:
+                  filteredWaiters.isEmpty
+                      ? _EmptyState()
+                      : ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 80),
+                        itemCount: filteredWaiters.length,
+                        itemBuilder: (context, index) {
+                          final waiter = filteredWaiters[index];
+                          return WaiterCard(
+                            name: waiter['name'] as String,
+                            photoUrl: waiter['photoUrl'] as String?,
+                            peopleCount: waiter['peopleCount'] as int,
+                            waitingMinutes: waiter['waitingMinutes'] as int,
+                            estimatedWaitMinutes:
+                                waiter['estimatedWaitMinutes'] as int?,
+                            status:
+                                (waiter['status'] as String) == 'waiting'
+                                    ? WaiterStatus.waiting
+                                    : WaiterStatus.notified,
+                            onCancel: () {
+                              homeNotifier.cancelWaiter(waiter['id'] as String);
+                            },
+                            onNotify: () {
+                              homeNotifier.notifyWaiter(waiter['id'] as String);
+                            },
+                            onServe: () {
+                              homeNotifier.serveWaiter(waiter['id'] as String);
+                            },
+                          );
+                        },
+                      ),
             ),
-          ),
-          // Waiters list
-          Expanded(
-            child:
-                filteredWaiters.isEmpty
-                    ? _EmptyState()
-                    : ListView.builder(
-                      padding: const EdgeInsets.only(bottom: 80),
-                      itemCount: filteredWaiters.length,
-                      itemBuilder: (context, index) {
-                        final waiter = filteredWaiters[index];
-                        return WaiterCard(
-                          name: waiter['name'] as String,
-                          photoUrl: waiter['photoUrl'] as String?,
-                          peopleCount: waiter['peopleCount'] as int,
-                          waitingMinutes: waiter['waitingMinutes'] as int,
-                          status:
-                              (waiter['status'] as String) == 'waiting'
-                                  ? WaiterStatus.waiting
-                                  : WaiterStatus.notified,
-                          onCancel: () {
-                            homeNotifier.cancelWaiter(waiter['id'] as String);
-                          },
-                          onNotify: () {
-                            homeNotifier.notifyWaiter(waiter['id'] as String);
-                          },
-                          onServe: () {
-                            homeNotifier.serveWaiter(waiter['id'] as String);
-                          },
-                        );
-                      },
-                    ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: homeNotifier.onAddWaiter,
-        backgroundColor: const Color(0xFF2196F3),
-        child: const Icon(Icons.add, color: Colors.white),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: homeNotifier.onAddWaiter,
+          backgroundColor: const Color(0xFF2196F3),
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }

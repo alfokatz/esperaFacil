@@ -7,6 +7,8 @@ import 'package:template/presentation/flows/home/nav/home_router.dart';
 import 'package:template/presentation/flows/login/nav/login_router.dart';
 import 'package:template/presentation/flows/register/nav/register_router.dart';
 
+import '../../presentation/flows/add_waiters/nav/add_waiters_router.dart';
+
 class AppRouter {
   final Ref ref;
 
@@ -25,6 +27,7 @@ class AppRouter {
       RegisterRouter.getRoute(),
       HomeRouter.getRoute(),
       DetailRouter.getRoute(),
+      AddWaitersRouter.getRoute(),
     ],
     errorPageBuilder:
         (context, state) => ErrorNav.getErrorPage(exception: state.error),

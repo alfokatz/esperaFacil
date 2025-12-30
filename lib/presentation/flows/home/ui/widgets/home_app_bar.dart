@@ -58,9 +58,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    waitingGroupsCount == 0
-                        ? 'N/A'
-                        : '$waitingGroupsCount grupos en espera',
+                    '$waitingGroupsCount grupos en espera',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: const Color(0xFF666666),
                     ),

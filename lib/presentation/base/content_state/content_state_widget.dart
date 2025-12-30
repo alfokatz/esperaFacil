@@ -21,6 +21,7 @@ class ContentStateWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(contentStateNotifierProvider);
+    print('🖼️ [ContentStateWidget] build() - Estado actual: $state');
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,

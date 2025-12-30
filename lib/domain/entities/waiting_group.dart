@@ -9,6 +9,7 @@ class WaitingGroup {
   final String? notifiedAt;
   final String? servedAt;
   final String? cancelledAt;
+  final int? estimatedWaitMinutes;
 
   WaitingGroup({
     required this.id,
@@ -21,6 +22,7 @@ class WaitingGroup {
     this.notifiedAt,
     this.servedAt,
     this.cancelledAt,
+    this.estimatedWaitMinutes,
   });
 
   int get waitingMinutes {
