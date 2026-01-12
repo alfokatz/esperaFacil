@@ -17,7 +17,7 @@ class AddWaitersProvider
   TextEditingController estimatedWaitMinutesController =
       TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
-
+  TextEditingController notesController = TextEditingController();
   AddWaitersProvider({required super.ref, required this.createClientUseCase})
     : super(state: AddWaitersState(name: '', peopleCount: 1)) {
     // Mostrar el contenido inmediatamente ya que no hay datos que cargar
@@ -38,6 +38,10 @@ class AddWaitersProvider
         estimatedWaitMinutes: estimatedWaitMinutes,
       ),
     );
+  }
+
+  void updateNotes(String notes) {
+    reducer(action: UpdateNotesAction(notes: notes));
   }
 
   Future<void> onAddClient() async {
@@ -62,7 +66,8 @@ class AddWaitersProvider
     final name = state.name;
     final peopleCount = state.peopleCount;
     final estimatedWaitMinutes = state.estimatedWaitMinutes;
-
+    final notes = state.notes;
+    final phoneNumber = state.phoneNumber;
     reducer(action: AddClientAction());
     showLoading();
 
@@ -76,6 +81,8 @@ class AddWaitersProvider
               name: name,
               peopleCount: peopleCount,
               estimatedWaitMinutes: estimatedWaitMinutes,
+              notes: notes,
+              phoneNumber: phoneNumber,
             ),
           ),
       onSuccess: (waitingGroup) {
@@ -86,21 +93,10 @@ class AddWaitersProvider
               'El cliente ha sido agregado exitosamente a la lista de espera',
         );
 
-        // Convertir WaitingGroup a Map para agregarlo a la lista de waiters
-        final newWaiter = {
-          'id': waitingGroup.id,
-          'name': waitingGroup.name,
-          'photoUrl': waitingGroup.photoUrl,
-          'peopleCount': waitingGroup.peopleCount,
-          'waitingMinutes': waitingGroup.waitingMinutes,
-          'estimatedWaitMinutes': waitingGroup.estimatedWaitMinutes,
-          'status': waitingGroup.status,
-        };
-
         // Agregar el nuevo cliente a la lista de waiters en HomeProvider
         try {
           final homeNotifier = ref.read(homeProvider.notifier);
-          homeNotifier.addWaiter(newWaiter);
+          homeNotifier.addWaiter(waitingGroup);
         } catch (e) {
           // Si el provider no está disponible, no hacer nada
           // Se recargará cuando se navegue a home
@@ -133,6 +129,8 @@ class AddWaitersProvider
         state = state.copyWith(
           estimatedWaitMinutes: action.estimatedWaitMinutes,
         );
+      case UpdateNotesAction():
+        state = state.copyWith(notes: action.notes);
       case AddClientAction():
         // La lógica de agregar cliente se maneja en onAddClient()
         break;

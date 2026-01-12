@@ -64,9 +64,7 @@ class _FilterButton extends StatelessWidget {
     required this.isSelected,
     required this.onPressed,
     this.indicatorColor,
-  });
-
-  @override
+  });  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 

@@ -56,27 +56,12 @@ class HomeProvider extends BaseStateNotifier<HomeState, HomeAction> {
                   )
                   .toList();
 
-          // Convertir WaitingGroup a Map para mantener compatibilidad con el estado actual
-          final waiters =
-              activeGroups
-                  .map(
-                    (wg) => {
-                      'id': wg.id,
-                      'name': wg.name,
-                      'photoUrl': wg.photoUrl,
-                      'peopleCount': wg.peopleCount,
-                      'waitingMinutes': wg.waitingMinutes,
-                      'estimatedWaitMinutes': wg.estimatedWaitMinutes,
-                      'status': wg.status,
-                    },
-                  )
-                  .toList();
           showContent();
           reducer(
             action: LoadHomeDataAction(
               businessName: currentBusinessName,
               waitingGroupsCount: activeGroups.length,
-              waiters: waiters,
+              waiters: activeGroups,
             ),
           );
         } catch (e) {
@@ -147,9 +132,9 @@ class HomeProvider extends BaseStateNotifier<HomeState, HomeAction> {
     state = state.copyWith(selectedFilter: filter);
   }
 
-  void addWaiter(Map<String, dynamic> waiter) {
+  void addWaiter(WaitingGroup waiter) {
     // Solo agregar si el status es 'waiting' o 'notified'
-    if (waiter['status'] == 'waiting' || waiter['status'] == 'notified') {
+    if (waiter.status == 'waiting' || waiter.status == 'notified') {
       final updatedWaiters = [waiter, ...state.waiters];
       // Actualizar el estado con el nuevo waiter y el contador
       state = state.copyWith(
@@ -159,14 +144,14 @@ class HomeProvider extends BaseStateNotifier<HomeState, HomeAction> {
     }
   }
 
-  List<Map<String, dynamic>> getFilteredWaiters() {
+  List<WaitingGroup> getFilteredWaiters() {
     switch (state.selectedFilter) {
       case WaitersFilterType.all:
         return state.waiters;
       case WaitersFilterType.waiting:
-        return state.waiters.where((w) => w['status'] == 'waiting').toList();
+        return state.waiters.where((w) => w.status == 'waiting').toList();
       case WaitersFilterType.notified:
-        return state.waiters.where((w) => w['status'] == 'notified').toList();
+        return state.waiters.where((w) => w.status == 'notified').toList();
     }
   }
 

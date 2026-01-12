@@ -10,7 +10,8 @@ class WaitingGroup {
   final String? servedAt;
   final String? cancelledAt;
   final int? estimatedWaitMinutes;
-
+  final String? notes;
+  final String? phoneNumber;
   WaitingGroup({
     required this.id,
     required this.businessId,
@@ -23,6 +24,8 @@ class WaitingGroup {
     this.servedAt,
     this.cancelledAt,
     this.estimatedWaitMinutes,
+    this.notes,
+    this.phoneNumber,
   });
 
   int get waitingMinutes {
@@ -32,4 +35,3 @@ class WaitingGroup {
     return now.difference(created).inMinutes;
   }
 }
-

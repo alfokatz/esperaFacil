@@ -22,3 +22,5 @@ final notifyClientUseCase = Provider(
     waitingGroupRepository: ref.watch(waitingGroupRepositoryProvider),
   ),
 );
+
+

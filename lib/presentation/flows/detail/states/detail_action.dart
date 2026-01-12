@@ -1,21 +1,9 @@
-import 'package:template/domain/entities/photo.dart';
+import 'package:template/domain/entities/waiting_group.dart';
 
 sealed class DetailAction {}
 
 class Load extends DetailAction {
-  final Photo photo;
+  final WaitingGroup waitingGroup;
 
-  Load({required this.photo});
-}
-
-class Like extends DetailAction {
-  final int like;
-
-  Like({required this.like});
-}
-
-class Dislike extends DetailAction {
-  final int dislike;
-
-  Dislike({required this.dislike});
+  Load({required this.waitingGroup});
 }

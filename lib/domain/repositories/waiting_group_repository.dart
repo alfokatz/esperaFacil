@@ -5,6 +5,10 @@ import 'package:template/domain/entities/waiting_group.dart';
 abstract class WaitingGroupRepository {
   Future<Either<HttpError, List<WaitingGroup>>> getWaitingGroups();
 
+  Future<Either<HttpError, WaitingGroup>> getWaitingGroupById({
+    required String waitingGroupId,
+  });
+
   Future<Either<HttpError, void>> cancelWaitingGroup({required String id});
 
   Future<Either<HttpError, void>> notifyWaitingGroup({required String id});
@@ -16,5 +20,7 @@ abstract class WaitingGroupRepository {
     required int peopleCount,
     String? photoUrl,
     int? estimatedWaitMinutes,
+    String? notes,
+    String? phoneNumber,
   });
 }

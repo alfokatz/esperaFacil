@@ -55,6 +55,38 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
   }
 
   @override
+  Future<Either<HttpError, WaitingGroup>> getWaitingGroupById({
+    required String waitingGroupId,
+  }) async {
+    try {
+      final response =
+          await supabase.from('waiting_groups').select().eq('id', id).single();
+
+      final waitingGroup = WaitingGroup(
+        id: response['id'] as String,
+        businessId: response['business_id'] as String,
+        name: response['name'] as String,
+        peopleCount: response['people_count'] as int,
+        status: response['status'] as String,
+        photoUrl: response['photo_url'] as String?,
+        createdAt: response['created_at'] as String?,
+        notifiedAt: response['notified_at'] as String?,
+        servedAt: response['served_at'] as String?,
+        cancelledAt: response['cancelled_at'] as String?,
+        estimatedWaitMinutes: response['estimated_wait_minutes'] as int?,
+        notes: response['notes'] as String?,
+        phoneNumber: response['phone_number'] as String?,
+      );
+
+      return right(waitingGroup);
+    } catch (e) {
+      return left(
+        HttpError(code: 'get_waiting_group_by_id_error', message: e.toString()),
+      );
+    }
+  }
+
+  @override
   Future<Either<HttpError, void>> cancelWaitingGroup({
     required String id,
   }) async {
@@ -123,6 +155,8 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
     required int peopleCount,
     String? photoUrl,
     int? estimatedWaitMinutes,
+    String? notes,
+    String? phoneNumber,
   }) async {
     try {
       final user = supabase.auth.currentUser;
@@ -140,6 +174,8 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
         if (photoUrl != null) 'photo_url': photoUrl,
         if (estimatedWaitMinutes != null)
           'estimated_wait_minutes': estimatedWaitMinutes,
+        if (notes != null) 'notes': notes,
+        if (phoneNumber != null) 'phone_number': phoneNumber,
       };
 
       final response =
@@ -161,6 +197,8 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
         servedAt: response['served_at'] as String?,
         cancelledAt: response['cancelled_at'] as String?,
         estimatedWaitMinutes: response['estimated_wait_minutes'] as int?,
+        notes: response['notes'] as String?,
+        phoneNumber: response['phone_number'] as String?,
       );
 
       return right(waitingGroup);

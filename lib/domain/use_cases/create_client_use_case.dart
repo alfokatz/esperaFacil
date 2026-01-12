@@ -12,12 +12,15 @@ class CreateClientParams {
   final int peopleCount;
   final String? photoUrl;
   final int? estimatedWaitMinutes;
-
+  final String? notes;
+  final String? phoneNumber;
   CreateClientParams({
     required this.name,
     required this.peopleCount,
     this.photoUrl,
     this.estimatedWaitMinutes,
+    this.notes,
+    this.phoneNumber,
   });
 }
 
@@ -36,6 +39,8 @@ class CreateClientUseCase
       peopleCount: params.peopleCount,
       photoUrl: params.photoUrl,
       estimatedWaitMinutes: params.estimatedWaitMinutes,
+      notes: params.notes,
+      phoneNumber: params.phoneNumber,
     );
   }
 }
@@ -45,4 +50,3 @@ final createClientUseCase = Provider(
     waitingGroupRepository: ref.watch(waitingGroupRepositoryProvider),
   ),
 );
-

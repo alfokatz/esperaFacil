@@ -2,18 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/domain/entities/photo.dart';
 import 'package:template/presentation/base/content_state/content_state_widget.dart';
-import 'package:template/presentation/base/core/base_hook_widget.dart';
 import 'package:template/presentation/base/core/base_stateful_widget.dart';
-import 'package:template/presentation/flows/detail/providers/detail_provider.dart';
-import 'package:template/presentation/shared/photo_card_widget.dart';
 import 'package:template/presentation/base/theme/app_dimens.dart';
+import 'package:template/presentation/flows/detail/providers/detail_provider.dart';
+
+import 'widgets/detail_bottom_bar.dart';
+import 'widgets/detail_content.dart';
 
 class DetailScreen extends StatefulHookConsumerWidget {
-  late int id;
+  final String waitingGroupId;
 
-  DetailScreen({super.key, required this.id});
+  const DetailScreen({super.key, required this.waitingGroupId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _DetailScreenState();
@@ -23,17 +23,13 @@ class _DetailScreenState extends BaseStatefulWidget<DetailScreen> {
   @override
   void initState() {
     runAfterPostFrameCallback(() {
-      ref.read(detailProvider.notifier).init(id: widget.id);
+      ref.read(detailProvider.notifier).init(id: widget.waitingGroupId);
     });
     super.initState();
   }
 
   @override
   Widget buildView(BuildContext context) {
-    final photo = ref.watch(
-      detailProvider.select((selector) => selector.photo),
-    );
-
     return SafeArea(
       child: ContentStateWidget(
         appBar: AppBar(
@@ -50,22 +46,15 @@ class _DetailScreenState extends BaseStatefulWidget<DetailScreen> {
             },
           ),
         ),
-        child: photo != null ? _DetailContent(photo: photo) : SizedBox.shrink(),
+        child: Column(
+          children: [
+            Expanded(
+              child: DetailContent(waitingGroupId: widget.waitingGroupId),
+            ),
+            DetailBottomBar(),
+          ],
+        ),
       ),
-    );
-  }
-}
-
-class _DetailContent extends BaseHookWidget {
-  final Photo photo;
-
-  _DetailContent({required this.photo});
-
-  @override
-  Widget buildView(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [PhotoCardWidget(photo: photo)],
     );
   }
 }

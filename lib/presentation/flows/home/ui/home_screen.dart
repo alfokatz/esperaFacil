@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/presentation/base/content_state/content_state_widget.dart';
 import 'package:template/presentation/base/core/base_stateful_widget.dart';
-import 'package:template/presentation/flows/home/providers/home_provider.dart';
 import 'package:template/presentation/flows/home/ui/widgets/home_content.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {

@@ -6,6 +6,7 @@ import '../../../../base/core/base_hook_widget.dart';
 import '../../../../base/theme/app_dimens.dart';
 import '../../../../shared/app_buttons.dart';
 import '../../../../shared/form_field/app_form_field_with_label.dart';
+import '../../../../shared/app_text_box_field.dart';
 import '../../providers/add_waiters_provider.dart';
 import 'people_count_field.dart';
 
@@ -19,6 +20,7 @@ class AddClientForm extends BaseHookWidget {
     final estimatedWaitMinutesController =
         addWaitersNotifier.estimatedWaitMinutesController;
     final phoneNumberController = addWaitersNotifier.phoneNumberController;
+    final notesController = addWaitersNotifier.notesController;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -64,6 +66,14 @@ class AddClientForm extends BaseHookWidget {
             }
           },
           required: false,
+        ),
+        AppTextBox(
+          label: 'Notas del cliente',
+          hintText: 'Ej: Lugar prferido, alergias, restricciones,  etc.',
+          controller: notesController,
+          onChanged: (value) {
+            addWaitersNotifier.updateNotes(value);
+          },
         ),
         const SizedBox(height: AppDimens.largeMargin),
         CustomPrimaryButton(

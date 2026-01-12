@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/config/navigation/navigator.dart';
 import 'package:template/presentation/base/theme/app_dimens.dart';
+import 'package:template/presentation/flows/detail/nav/detail_nav.dart';
 import 'package:template/presentation/flows/home/providers/home_provider.dart';
 import 'package:template/presentation/flows/home/ui/widgets/home_app_bar.dart';
 import 'package:template/presentation/flows/home/ui/widgets/waiter_card.dart';
@@ -55,25 +57,32 @@ class HomeContent extends HookConsumerWidget {
                         itemCount: filteredWaiters.length,
                         itemBuilder: (context, index) {
                           final waiter = filteredWaiters[index];
+                          final navigation = ref.read(
+                            navigationProvider.notifier,
+                          );
                           return WaiterCard(
-                            name: waiter['name'] as String,
-                            photoUrl: waiter['photoUrl'] as String?,
-                            peopleCount: waiter['peopleCount'] as int,
-                            waitingMinutes: waiter['waitingMinutes'] as int,
-                            estimatedWaitMinutes:
-                                waiter['estimatedWaitMinutes'] as int?,
+                            name: waiter.name,
+                            photoUrl: waiter.photoUrl,
+                            peopleCount: waiter.peopleCount,
+                            waitingMinutes: waiter.waitingMinutes,
+                            estimatedWaitMinutes: waiter.estimatedWaitMinutes,
                             status:
-                                (waiter['status'] as String) == 'waiting'
+                                waiter.status == 'waiting'
                                     ? WaiterStatus.waiting
                                     : WaiterStatus.notified,
+                            onTap: () {
+                              navigation.navigate(
+                                GotoDetail(waitingGroupId: waiter.id),
+                              );
+                            },
                             onCancel: () {
-                              homeNotifier.cancelWaiter(waiter['id'] as String);
+                              homeNotifier.cancelWaiter(waiter.id);
                             },
                             onNotify: () {
-                              homeNotifier.notifyWaiter(waiter['id'] as String);
+                              homeNotifier.notifyWaiter(waiter.id);
                             },
                             onServe: () {
-                              homeNotifier.serveWaiter(waiter['id'] as String);
+                              homeNotifier.serveWaiter(waiter.id);
                             },
                           );
                         },

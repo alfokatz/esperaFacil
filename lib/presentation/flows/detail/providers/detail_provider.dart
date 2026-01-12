@@ -1,68 +1,82 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/domain/entities/photo.dart';
-import 'package:template/domain/use_cases/get_photo_by_id_use_case.dart';
 import 'package:template/presentation/base/providers/base_state_notifier.dart';
 import 'package:template/presentation/flows/detail/states/detail_action.dart';
 import 'package:template/presentation/flows/detail/states/detail_state.dart';
 
+import '../../../../domain/entities/waiting_group.dart';
+import '../../../../domain/use_cases/get_client_by_id_use_case.dart';
+
 class DetailProvider extends BaseStateNotifier<DetailState, DetailAction> {
-  final GetPhotoByIdUseCase getPhotoByIdUseCase;
+  final GetWaitingGroupByIdUseCase getWaitingGroupByIdUseCase;
 
-  DetailProvider({
-    required super.ref,
-    required this.getPhotoByIdUseCase,
-  }) : super(state: DetailState());
+  DetailProvider({required super.ref, required this.getWaitingGroupByIdUseCase})
+    : super(state: DetailState());
 
-  void init({required int id}) async {
-    _callGetPhotoByIdUseCase(id: id);
+  void init({required String id}) async {
+    _callGetWaitingGroupByIdUseCase(id: id);
   }
 
-  void _callGetPhotoByIdUseCase({required int id}) {
+  void _callGetWaitingGroupByIdUseCase({required String id}) {
     showLoading();
-    super.callService<Photo>(
-      service: () => getPhotoByIdUseCase(params: id),
-      onSuccess: (photo) {
-        reducer(
-          action: Load(photo: photo),
-        );
+    super.callService<WaitingGroup>(
+      service: () => getWaitingGroupByIdUseCase(params: id),
+      onSuccess: (waitingGroup) {
+        reducer(action: Load(waitingGroup: waitingGroup));
         showContent();
       },
-      onCustomError: (error) {},
+      onCustomError: (error) {
+        showContent();
+        showErrorAlert(title: 'Error', message: error.message);
+      },
     );
   }
 
-  void like() {
-    reducer(
-      action: Like(like: state.like + 1),
-    );
+  String getStatusText(String status) {
+    switch (status) {
+      case 'waiting':
+        return 'Esperando';
+      case 'notified':
+        return 'Avisado';
+      case 'served':
+        return 'Atendido';
+      case 'cancelled':
+        return 'Cancelado';
+      default:
+        return 'Esperando';
+    }
   }
 
-  void dislike() {
-    reducer(
-      action: Dislike(dislike: state.dislike + 1),
-    );
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'waiting':
+        return const Color(0xFFFFF9C4); // Amarillo claro
+      case 'notified':
+        return const Color(0xFFFFE0B2); // Naranja claro
+      default:
+        return const Color(0xFFFFF9C4);
+    }
+  }
+
+  String getShortId(String id) {
+    if (id.length <= 3) return id;
+    return id.substring(id.length - 3);
   }
 
   @override
   void reducer({required DetailAction action}) {
     switch (action) {
       case Load():
-        state = state.copyWith(photo: action.photo);
-      case Like():
-        state = state.copyWith(like: action.like);
-      case Dislike():
-        state = state.copyWith(dislike: action.dislike);
+        state = state.copyWith(waitingGroup: action.waitingGroup);
     }
   }
 }
 
 final detailProvider =
-    StateNotifierProvider.autoDispose<DetailProvider, DetailState>(
-  (ref) {
-    final notifier = DetailProvider(
-      getPhotoByIdUseCase: ref.watch(getPhotoByIdUseCase),
-      ref: ref,
-    );
-    return notifier;
-  },
-);
+    StateNotifierProvider.autoDispose<DetailProvider, DetailState>((ref) {
+      final notifier = DetailProvider(
+        getWaitingGroupByIdUseCase: ref.watch(getWaitingGroupByIdUseCase),
+        ref: ref,
+      );
+      return notifier;
+    });

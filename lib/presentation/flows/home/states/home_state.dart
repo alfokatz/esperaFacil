@@ -1,11 +1,12 @@
 import 'package:template/domain/entities/photo.dart';
+import 'package:template/domain/entities/waiting_group.dart';
 import 'package:template/presentation/flows/home/ui/widgets/waiters_filter.dart';
 
 class HomeState {
   final List<Photo> photos;
   final String businessName;
   final int waitingGroupsCount;
-  final List<Map<String, dynamic>> waiters;
+  final List<WaitingGroup> waiters;
   final WaitersFilterType selectedFilter;
 
   HomeState({
@@ -21,7 +22,7 @@ class HomeState {
     String? showError,
     String? businessName,
     int? waitingGroupsCount,
-    List<Map<String, dynamic>>? waiters,
+    List<WaitingGroup>? waiters,
     WaitersFilterType? selectedFilter,
   }) {
     return HomeState(

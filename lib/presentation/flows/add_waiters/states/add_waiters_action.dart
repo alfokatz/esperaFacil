@@ -15,6 +15,11 @@ class UpdateEstimatedWaitMinutesAction extends AddWaitersAction {
   UpdateEstimatedWaitMinutesAction({required this.estimatedWaitMinutes});
 }
 
+class UpdateNotesAction extends AddWaitersAction {
+  final String notes;
+  UpdateNotesAction({required this.notes});
+}
+
 class AddClientAction extends AddWaitersAction {
   AddClientAction();
 }

@@ -1,4 +1,5 @@
 import 'package:template/domain/entities/photo.dart';
+import 'package:template/domain/entities/waiting_group.dart';
 
 sealed class HomeAction {}
 
@@ -11,7 +12,7 @@ class LoadAction extends HomeAction {
 class LoadHomeDataAction extends HomeAction {
   final String businessName;
   final int waitingGroupsCount;
-  final List<Map<String, dynamic>> waiters;
+  final List<WaitingGroup> waiters;
 
   LoadHomeDataAction({
     required this.businessName,
@@ -21,7 +22,7 @@ class LoadHomeDataAction extends HomeAction {
 }
 
 class AddWaiterAction extends HomeAction {
-  final Map<String, dynamic> waiter;
+  final WaitingGroup waiter;
 
   AddWaiterAction({required this.waiter});
 }

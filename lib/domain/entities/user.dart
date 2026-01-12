@@ -4,11 +4,5 @@ class User {
   final String? createdAt;
   final String? updatedAt;
 
-  User({
-    required this.id,
-    this.email,
-    this.createdAt,
-    this.updatedAt,
-  });
+  User({required this.id, this.email, this.createdAt, this.updatedAt});
 }
-
