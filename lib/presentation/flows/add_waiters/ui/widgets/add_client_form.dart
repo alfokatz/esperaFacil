@@ -42,7 +42,14 @@ class AddClientForm extends BaseHookWidget {
           hintText: 'Ej: 099123456',
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           controller: phoneNumberController,
-          onChanged: (value) {},
+          onChanged: (value) {
+            addWaitersNotifier.updatePhoneNumber(value);
+            if (value.isEmpty) {
+              addWaitersNotifier.updatePhoneNumber(null);
+            } else {
+              addWaitersNotifier.updatePhoneNumber(value);
+            }
+          },
           required: false,
         ),
         const SizedBox(height: AppDimens.mediumMargin),

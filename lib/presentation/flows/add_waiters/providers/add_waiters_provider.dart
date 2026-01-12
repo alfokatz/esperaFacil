@@ -40,6 +40,10 @@ class AddWaitersProvider
     );
   }
 
+  void updatePhoneNumber(String? phoneNumber) {
+    reducer(action: UpdatePhoneNumberAction(phoneNumber: phoneNumber));
+  }
+
   void updateNotes(String notes) {
     reducer(action: UpdateNotesAction(notes: notes));
   }
@@ -129,6 +133,8 @@ class AddWaitersProvider
         state = state.copyWith(
           estimatedWaitMinutes: action.estimatedWaitMinutes,
         );
+      case UpdatePhoneNumberAction():
+        state = state.copyWith(phoneNumber: action.phoneNumber);
       case UpdateNotesAction():
         state = state.copyWith(notes: action.notes);
       case AddClientAction():
