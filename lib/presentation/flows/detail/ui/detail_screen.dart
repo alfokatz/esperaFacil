@@ -22,37 +22,45 @@ class DetailScreen extends StatefulHookConsumerWidget {
 class _DetailScreenState extends BaseStatefulWidget<DetailScreen> {
   @override
   void initState() {
+    super.initState();
+    // Inicializar después del primer frame para asegurar que el provider esté montado
     runAfterPostFrameCallback(() {
       ref.read(detailProvider.notifier).init(id: widget.waitingGroupId);
     });
-    super.initState();
   }
 
   @override
   Widget buildView(BuildContext context) {
-    return SafeArea(
-      child: ContentStateWidget(
-        appBar: AppBar(
-          title: Text(
-            'detail_title'.tr(),
-            style: TextTheme.of(context).titleLarge,
-          ),
-          elevation: AppDimens.elevationMin,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            child: const Icon(Icons.arrow_back, color: Colors.black),
-            onTap: () {
-              GoRouter.of(context).pop();
-            },
-          ),
-        ),
-        child: Column(
-          children: [
-            Expanded(
-              child: DetailContent(waitingGroupId: widget.waitingGroupId),
+    // Observar el provider para mantenerlo vivo
+    ref.watch(detailProvider);
+
+    return Container(
+      color: const Color(0xFFF5F5F5),
+      child: SafeArea(
+        child: ContentStateWidget(
+          appBar: AppBar(
+            backgroundColor: const Color(0xFFF5F5F5),
+            title: Text(
+              'detail_title'.tr(),
+              style: TextTheme.of(context).titleLarge,
             ),
-            DetailBottomBar(),
-          ],
+            elevation: AppDimens.elevationMin,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              child: const Icon(Icons.arrow_back, color: Colors.black),
+              onTap: () {
+                GoRouter.of(context).pop();
+              },
+            ),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: DetailContent(waitingGroupId: widget.waitingGroupId),
+              ),
+              DetailBottomBar(),
+            ],
+          ),
         ),
       ),
     );

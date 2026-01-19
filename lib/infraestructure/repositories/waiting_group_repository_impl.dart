@@ -60,7 +60,11 @@ class WaitingGroupRepositoryImpl implements WaitingGroupRepository {
   }) async {
     try {
       final response =
-          await supabase.from('waiting_groups').select().eq('id', id).single();
+          await supabase
+              .from('waiting_groups')
+              .select()
+              .eq('id', waitingGroupId)
+              .single();
 
       final waitingGroup = WaitingGroup(
         id: response['id'] as String,

@@ -66,9 +66,7 @@ class _FilterButton extends StatelessWidget {
     this.indicatorColor,
   });  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return GestureDetector(
+    final theme = Theme.of(context);    return GestureDetector(
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.symmetric(

@@ -8,22 +8,6 @@ import '../../providers/detail_provider.dart';
 class ClientContactDetails extends BaseHookWidget {
   ClientContactDetails({super.key});
 
-  Future<void> _makePhoneCall(String phoneNumber, BuildContext context) async {
-    // TODO: Implementar llamada real cuando se agregue url_launcher
-    // Por ahora, solo mostramos un mensaje
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Llamando a $phoneNumber'),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-    // Cuando se agregue url_launcher, usar:
-    // final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
-    // if (await canLaunchUrl(phoneUri)) {
-    //   await launchUrl(phoneUri);
-    // }
-  }
-
   @override
   Widget buildView(BuildContext context, WidgetRef ref) {
     final detailState = ref.watch(detailProvider);
@@ -129,7 +113,12 @@ class ClientContactDetails extends BaseHookWidget {
                       borderRadius: BorderRadius.circular(12),
                       onTap:
                           hasPhone
-                              ? () => _makePhoneCall(phoneNumber, context)
+                              ? () => ref
+                                  .read(detailProvider.notifier)
+                                  .makePhoneCall(
+                                    phoneNumber: phoneNumber,
+                                    context: context,
+                                  )
                               : null,
                       child: Icon(
                         Icons.phone,

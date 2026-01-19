@@ -1,190 +1,67 @@
-# 📱 Flutter Template
+# EsperaFácil
 
-## 📋 Requisitos Mínimos
-- Flutter SDK: ^3.7.0
-- iOS: 11.0+
-- Android: API 21+ (Android 5.0 Lollipop)
+## 📱 Descripción
 
-## 🏗️ Arquitectura
+**EsperaFácil** es una aplicación móvil desarrollada en Flutter diseñada para facilitar la gestión de listas de espera en negocios y restaurantes. La aplicación permite a los empleados gestionar eficientemente los grupos de clientes que esperan ser atendidos, brindando una solución integral para controlar el flujo de espera.
 
-Este proyecto implementa una arquitectura MVVM (Model-View-ViewModel) con Clean Architecture:
+## 🎯 Objetivo
 
-```
-lib/
-├── config/          # Configuraciones globales
-│   ├── navigation/  # Gestión de rutas
-│   ├── networking/  # Configuración de red
-│   ├── tracking/    # Analíticas (MixPanel)
-│   └── translate/   # Internacionalización
-├── domain/         # Lógica de negocio
-│   ├── entities/   # Modelos de dominio
-│   ├── managers/   # Interfaces de gestores
-│   └── use_cases/  # Casos de uso
-├── infrastructure/ # Implementaciones
-│   ├── managers/   # Implementación de gestores
-│   ├── models/     # Modelos de datos
-│   └── services/   # Servicios de API
-└── presentation/   # UI
-    ├── base/       # Componentes base
-    ├── flows/      # Flujos de la aplicación
-    └── widgets/    # Widgets reutilizables
-```
+El objetivo principal de EsperaFácil es simplificar y optimizar la gestión de listas de espera en establecimientos comerciales, permitiendo:
 
-## 📦 Librerías Principales
+- **Gestionar grupos de espera** de manera organizada y eficiente
+- **Monitorear el tiempo de espera** de cada cliente en tiempo real
+- **Notificar a los clientes** cuando estén próximos a ser atendidos
+- **Marcar el estado** de cada grupo (en espera, notificado, atendido, cancelado)
+- **Mantener información de contacto** (teléfono, notas) para cada grupo
+- **Filtrar grupos** según su estado para una mejor organización
 
-### Gestión de Estado y DI
-- **Riverpod**: ^2.5.2 - Gestión de estado e inyección de dependencias
-- **Hooks Riverpod**: Para composición de widgets y estado
+## ⚙️ Funcionamiento
 
-### Networking y Datos
-- **Dio**: ^5.7.0 - Cliente HTTP
-- **Retrofit**: ^4.4.1 - Cliente REST type-safe
-- **Shared Preferences**: ^2.3.2 - Almacenamiento local
-- **Flutter Secure Storage**: Almacenamiento seguro
+La aplicación funciona de la siguiente manera:
 
-### UI y Navegación
-- **Go Router**: ^14.2.7 - Navegación
-- **Flutter SVG**: ^2.0.10 - Soporte SVG
-- **Animate Do**: ^4.2.0 - Animaciones
-- **Lottie**: ^3.1.2 - Animaciones complejas
+### Pantalla de Inicio
+- Muestra una lista de grupos de espera activos
+- Permite filtrar grupos por estado (Todos, Esperando, Notificados)
+- Muestra información resumida: nombre del cliente, número de personas y tiempo de espera
+- Al seleccionar un grupo, se navega a su pantalla de detalle
 
-### Utilidades
-- **Freezed**: ^3.0.0 - Generación de código
-- **Easy Localization**: ^3.0.7 - Internacionalización
-- **Flutter dotenv**: ^5.1.0 - Variables de entorno
-- **MixPanel**: Analytics
+### Pantalla de Detalle
+- Muestra información completa del grupo de espera:
+  - Nombre e ID del cliente
+  - Número de personas
+  - Tiempo de espera calculado automáticamente
+  - Información de contacto (teléfono, notas)
+- Permite realizar acciones sobre el grupo:
+  - **Marcar como atendido**: Cambia el estado a "Atendido"
+  - **Notificar**: Marca al cliente como notificado
+  - **Cancelar**: Cancela el grupo de espera
 
-## ⚙️ Setup del Proyecto
+### Gestión de Estados
+Los grupos de espera pueden tener los siguientes estados:
+- **Esperando**: Cliente en lista de espera
+- **Notificado**: Cliente notificado que será atendido pronto
+- **Atendido**: Cliente ya fue atendido
+- **Cancelado**: Grupo cancelado
 
-1. **Clonar el repositorio**
-   ```bash
-   git clone <url-repositorio>
-   cd <nombre-proyecto>
-   ```
+## 🛠️ Tecnologías Utilizadas
 
-2. **Instalar dependencias**
-   ```bash
-   flutter pub get
-   ```
+- **Flutter** - Framework de desarrollo móvil
+- **Supabase** - Backend y base de datos
+- **Riverpod** - Gestión de estado
+- **GoRouter** - Navegación
 
-3. **Configurar variables de entorno**
-   - Crear archivos en assets/env/:
-     - .env.development
-     - .env.staging
-     - .env.production
-   ```
-   API_URL=<url-api>
-   MIX_PANEL_KEY=<key>
-   ```
+## 🚀 Configuración
 
-4. **Setup iOS**
-   ```bash
-   cd ios
-   pod install
-   cd ..
-   ```
+1. Clonar el repositorio
+2. Instalar dependencias: `flutter pub get`
+3. Configurar variables de entorno en `assets/env/`:
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY`
+   - `MIX_PANEL_KEY`
+4. Ejecutar la aplicación: `flutter run`
 
-5. **Generar código**
-   ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
-   ```
+## 📝 Notas
 
-## 🚀 Flavors y Ambientes
-
-### Ejecutar por ambiente
-```bash
-# Desarrollo
-flutter run --flavor development -t lib/main.dart
-
-# Staging
-flutter run --flavor staging -t lib/main.dart
-
-# Producción
-flutter run --flavor production -t lib/main.dart
-```
-
-## 🛠️ Guía de Desarrollo
-
-### Crear un Nuevo Flujo
-
-1. **Definir el Estado (State)**
-   ```dart
-   // lib/presentation/flows/example/states/example_state.dart
-   @freezed
-   class ExampleState with _$ExampleState {
-     factory ExampleState({
-       @Default([]) List<Item> items,
-     }) = _ExampleState;
-   }
-   ```
-
-2. **Crear el ViewModel**
-   ```dart
-   // lib/presentation/flows/example/providers/example_provider.dart
-   class ExampleProvider extends BaseStateNotifier<ExampleState, ExampleAction> {
-     ExampleProvider({required super.ref}) : super(state: ExampleState());
-   }
-   ```
-
-3. **Implementar la UI**
-   ```dart
-   // lib/presentation/flows/example/ui/example_screen.dart
-   class ExampleScreen extends BaseStatelessScreen {
-     @override
-     Widget buildView(BuildContext context, WidgetRef ref) {
-       return Container();
-     }
-   }
-   ```
-
-4. **Configurar la Navegación**
-   - Añadir la ruta en `lib/config/navigation/app_router.dart`
-
-### Manejo de Traducciones
-
-- Archivos en `assets/translations/`
-  - en-EN.json
-  - es-ES.json
-- Uso: `'key'.tr()`
-
-## 🔍 Testing
-
-```bash
-# Ejecutar tests
-flutter test
-
-# Tests con coverage
-flutter test --coverage
-```
-
-## 📦 Generación de Build
-
-### Android
-```bash
-flutter build apk --flavor production -t lib/main.dart
-```
-
-### iOS
-```bash
-flutter build ios --flavor production -t lib/main.dart
-```
-
-## 🔐 Seguridad
-
-- Almacenamiento seguro de tokens mediante Flutter Secure Storage
-- Encriptación de SharedPreferences en Android
-- Configuración de KeychainAccessibility en iOS
-
-## 🎨 Theming
-
-El proyecto utiliza Material 3 con temas personalizados:
-- Color Scheme personalizado
-- Typography personalizada
-- Extensiones de tema para colores y textos personalizados
-
-## 📝 Notas Adicionales
-
-- Mantener actualizadas las dependencias
-- Seguir las convenciones de código del proyecto
-- Documentar cambios significativos
-- Utilizar los providers base para nueva funcionalidad
+- La aplicación requiere autenticación para acceder a los grupos de espera
+- Los grupos de espera están asociados a un negocio específico
+- El tiempo de espera se calcula automáticamente basado en la fecha de creación
